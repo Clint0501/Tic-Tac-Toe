@@ -2,3 +2,11 @@
 Tic-Tac-Toe/Library
 Tic-Tac-Toe/Logs
 Tic-Tac-Toe/Temp
+Tic-Tac-Toe/obj
+Tic-Tac-Toe/Assets/UI Toolkit
+Tic-Tac-Toe/Assets/UI Toolkit.meta
+*.csproj
+*.dwlt
+*.index
+Tic-Tac-Toe/ProjectSettings
+*.sln

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Script.Common;
 using UnityEngine;
 
-namespace Script
+namespace Script.GameCore
 {
     public class UIManager : Singleton<UIManager>
     {

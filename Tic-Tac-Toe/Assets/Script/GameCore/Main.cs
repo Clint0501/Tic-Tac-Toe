@@ -1,7 +1,8 @@
 using System;
+using Script.GameCore;
 using UnityEngine;
 
-namespace Script
+namespace Script.GameCore
 {
     public class Main : MonoBehaviour
     {
@@ -10,6 +11,8 @@ namespace Script
         private GameManager m_GameManager;
         
         private UIManager m_UIManager;
+        
+        private EventManager m_EventManager;
         
         #endregion
         

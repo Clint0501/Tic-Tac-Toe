@@ -7,5 +7,10 @@ namespace Script.GameCore
         GameOver,
         PlayerChessDown,
         
+        
+        //UI事件
+        OpenView,
+        CloseView,
+        
     }
 }

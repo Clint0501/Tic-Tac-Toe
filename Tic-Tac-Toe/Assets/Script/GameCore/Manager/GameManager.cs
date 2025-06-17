@@ -26,16 +26,33 @@ namespace Script.GameCore
             EventManager.GetInstance().AttachEvent(EventKey.PlayerChessDown, OnPlayerChessDown);
         }
 
-        private void OnPlayerChessDown(object obj)
+        private void OnPlayerChessDown(IEvent ie)
         {
-            throw new NotImplementedException();
+            if(ie is PlayerChessDownEvent playerChessDownEvent)
+            {
+                int gridIndex = playerChessDownEvent.m_GridIndex;
+                PlayerData chessGridData = playerChessDownEvent.m_PlayerData;
+                if (m_ChessGridList[gridIndex].PlayerData == null)
+                {
+                    m_ChessGridList[gridIndex].PlayerData = chessGridData;
+                }
+                else
+                {
+                    OpenUIEvent evt = new OpenUIEvent
+                    {
+                        m_ViewName = "ErrorTipsView",
+                        m_Args = new object[]{ "请下在正确的格子上" }
+                    };
+                    EventManager.GetInstance().DispatchEvent(evt);
+                }
+            }
         }
 
-        private void OnGameStart(object obj)
+        private void OnGameStart(IEvent ie)
         {
-            if(obj is GameModeEnum _enum)
+            if(ie is StartGameEvent startGameEvent)
             {
-                switch (_enum)
+                switch (startGameEvent.m_GameMode)
                 {
                     case GameModeEnum.TwoPlayer:
                         HandleTwoPlayerGameStart();
@@ -50,15 +67,7 @@ namespace Script.GameCore
             }
         }
 
-        private void HandleAIPlayerGameStart()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void HandleTwoPlayerGameStart()
-        {
-            throw new NotImplementedException();
-        }
+       
 
         // Update is called once per frame
         public void Update()
@@ -68,13 +77,24 @@ namespace Script.GameCore
 
         public void OnDisable()
         {
-            
+            EventManager.GetInstance().DetachEvent(EventKey.GameStart, OnGameStart);
+            EventManager.GetInstance().DetachEvent(EventKey.PlayerChessDown, OnPlayerChessDown);
         }
 
         #endregion
     
         #region 内部调用
 
+        private void HandleAIPlayerGameStart()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void HandleTwoPlayerGameStart()
+        {
+            throw new NotImplementedException();
+        }
+        
         private void GameCheck()
         {
         
@@ -93,16 +113,7 @@ namespace Script.GameCore
             m_Player2 = player;
         }
         #endregion
-
-        public void AttachEvent(EventKey eventName, Action<object> action)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DetachAllEvent()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
 

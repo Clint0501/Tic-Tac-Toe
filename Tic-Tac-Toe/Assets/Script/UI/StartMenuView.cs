@@ -18,12 +18,20 @@ namespace Script.UI
 
         private void OnTwoPlayerGameStart()
         {
-            EventManager.GetInstance().DispatchEvent(EventKey.GameStart, GameModeEnum.TwoPlayer);
+            StartGameEvent startGameEvent  = new StartGameEvent
+            {
+                m_GameMode = GameModeEnum.TwoPlayer
+            };
+            EventManager.GetInstance().DispatchEvent(startGameEvent);
         }
 
         private void OnAIGameStart()
         {
-            EventManager.GetInstance().DispatchEvent(EventKey.GameStart, GameModeEnum.AIPlayer);
+            StartGameEvent startGameEvent  = new StartGameEvent
+            {
+                m_GameMode = GameModeEnum.AIPlayer
+            };
+            EventManager.GetInstance().DispatchEvent(startGameEvent);
         }
 
         protected override void OverrideStart()

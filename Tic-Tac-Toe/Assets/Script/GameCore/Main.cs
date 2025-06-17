@@ -39,5 +39,18 @@ namespace Script.GameCore
                 m_UIManager.Update();
             }
         }
+
+        private void OnDisable()
+        {
+            if (m_GameManager != null)
+            {
+                m_GameManager.OnDisable();
+            }
+
+            if (m_UIManager != null)
+            {
+                m_UIManager.OnDisable();
+            }
+        }
     }
 }

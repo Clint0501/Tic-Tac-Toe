@@ -17,23 +17,51 @@ namespace Script.GameCore
 
         public void Start()
         {
-            
+            EventManager.GetInstance().AttachEvent(EventKey.OpenView, OnOpenView);
+            EventManager.GetInstance().AttachEvent(EventKey.CloseView, OnCloseView);
         }
+        
 
         public void Update()
         {
             
         }
 
+
+        public void OnDisable()
+        {
+            EventManager.GetInstance().DetachEvent(EventKey.OpenView, OnOpenView);
+            EventManager.GetInstance().DetachEvent(EventKey.CloseView, OnCloseView);
+        }
+
         #endregion
         
-        #region 外部调用
+        #region 内部调用
 
+        private void OnCloseView(object obj)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void OnOpenView(object obj)
+        {
+            throw new System.NotImplementedException();
+        }
+        
         /// <summary>
         /// 打开某个UI
         /// </summary>
         /// <param name="viewName"></param>
-        public void OpenView(string viewName,params object[] args)
+        private void OpenView(string viewName,params object[] args)
+        {
+            
+        }
+        
+        /// <summary>
+        /// 打开某个UI
+        /// </summary>
+        /// <param name="viewName"></param>
+        private void CloseView(string viewName,params object[] args)
         {
             
         }

@@ -19,6 +19,13 @@ namespace Script.GameCore
     
     public class ChessGridData
     {
-        PlayerData m_PlayerData;
+        
+        private PlayerData m_PlayerData;
+        
+        public PlayerData PlayerData
+        {
+            set => m_PlayerData = value;
+            get => m_PlayerData;
+        }
     }
 }

@@ -51,4 +51,14 @@ namespace Script.GameCore
         
         public object[] m_Args;
     }
+    
+    public class CloseUIEvent : IEvent
+    {
+        public EventKey m_Key
+        {
+            get => EventKey.CloseView;
+        }
+
+        public string m_ViewName;
+    }
 }

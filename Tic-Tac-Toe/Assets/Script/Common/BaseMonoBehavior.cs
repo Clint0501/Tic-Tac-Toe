@@ -66,6 +66,11 @@ namespace Script.GameCore
             OverrideDisable();
         }
 
+        public virtual void InitViewData(object[] args)
+        {
+            
+        }
+        
         protected virtual void OverrideAwake()
         {
             

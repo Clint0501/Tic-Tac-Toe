@@ -1,27 +1,18 @@
 using System;
 using System.Collections.Generic;
 using Script.Common;
+using Script.GameCore.Util;
 using UnityEngine;
 
 namespace Script.GameCore
 {
     public class GameManager : Singleton<GameManager>
     {
-
-        #region 内部变量
-
-        private PlayerData m_Player1;
-        private PlayerData m_Player2;
-    
-        List<ChessGridData>  m_ChessGridList;
-
-        #endregion
     
         #region 生命周期
         // Start is called before the first frame update
         public void Start()
         {
-            m_ChessGridList = new List<ChessGridData>(9);
             EventManager.GetInstance().AttachEvent(EventKey.GameStart, OnGameStart);
             EventManager.GetInstance().AttachEvent(EventKey.PlayerChessDown, OnPlayerChessDown);
         }
@@ -32,38 +23,27 @@ namespace Script.GameCore
             {
                 int gridIndex = playerChessDownEvent.m_GridIndex;
                 PlayerData chessGridData = playerChessDownEvent.m_PlayerData;
-                if (m_ChessGridList[gridIndex].PlayerData == null)
+                if (!ChessBoardData.GetInstance().TrySetChessGridData(chessGridData, gridIndex))
                 {
-                    m_ChessGridList[gridIndex].PlayerData = chessGridData;
-                }
-                else
-                {
-                    OpenUIEvent evt = new OpenUIEvent
-                    {
-                        m_ViewName = "ErrorTipsView",
-                        m_Args = new object[]{ "请下在正确的格子上" }
-                    };
-                    EventManager.GetInstance().DispatchEvent(evt);
+                    UIUitl.ShowErrorTips("请落在空白的棋格子上");
                 }
             }
         }
 
         private void OnGameStart(IEvent ie)
         {
-            if(ie is StartGameEvent startGameEvent)
+            if (ie is not StartGameEvent startGameEvent) return;
+            switch (startGameEvent.m_GameMode)
             {
-                switch (startGameEvent.m_GameMode)
-                {
-                    case GameModeEnum.TwoPlayer:
-                        HandleTwoPlayerGameStart();
-                        break;
-                    case  GameModeEnum.AIPlayer:
-                        HandleAIPlayerGameStart();
-                        break;
-                    default:
-                        break;
+                case GameModeEnum.TwoPlayer:
+                    HandleTwoPlayerGameStart();
+                    break;
+                case  GameModeEnum.AIPlayer:
+                    HandleAIPlayerGameStart();
+                    break;
+                default:
+                    break;
                     
-                }
             }
         }
 
@@ -97,20 +77,7 @@ namespace Script.GameCore
         
         private void GameCheck()
         {
-        
-        }
-        #endregion
-    
-        #region 外部调用
-
-        public void SetPlayer1(PlayerData player)
-        {
-            m_Player1 = player;
-        }
-
-        public void SetPlayer2(PlayerData player)
-        {
-            m_Player2 = player;
+            
         }
         #endregion
         

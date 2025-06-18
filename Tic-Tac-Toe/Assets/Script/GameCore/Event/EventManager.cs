@@ -7,8 +7,8 @@ namespace Script.GameCore
     public class EventManager : Singleton<EventManager>
     {
         private Dictionary<EventKey,List<Action<IEvent>>> m_EventKey2Actions = new Dictionary<EventKey,List<Action<IEvent>>>();
-
-
+        
+        
         public void AttachEvent(EventKey eventKey, Action<IEvent> action)
         {
             if (m_EventKey2Actions.TryGetValue(eventKey, out List<Action<IEvent>> actions))

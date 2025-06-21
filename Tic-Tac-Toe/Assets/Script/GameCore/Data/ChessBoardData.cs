@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Script.Common;
+using Script.GameCore.PlayerCtrl;
 
 namespace Script.GameCore
 {
@@ -36,30 +37,118 @@ namespace Script.GameCore
     {
         #region 游戏数据
 
-        public List<ChessGridData>  m_ChessGridDataList { get; private set; }
+        public Dictionary<int, ChessGridData>  m_ChessGridDataDic { get; private set; }
 
-        public PlayerData m_PlayerData1 { get; private set; }
+        public BasePlayer m_SelfPlayer { get; private set; }
         
-        public PlayerData m_PlayerData2 { get; private set; }
+        public BasePlayer m_OppoPlayer { get; private set; }
+
+        private BasePlayer m_CurrentPlayer;
+        
+        private GameModeEnum m_CurrentGameMode;
         
         #endregion
         
-        public void Start()
+        /// <summary>
+        /// 初始化对局数据
+        /// </summary>
+        public void Init(GameModeEnum  mode)
         {
+            m_ChessGridDataDic ??= new Dictionary<int, ChessGridData>();
+            m_ChessGridDataDic.Clear();
+            for (int i = 0; i < 9; i++)
+            {
+                m_ChessGridDataDic.Add(i, null);
+            }
+
+            m_SelfPlayer = new BasePlayer();
+            m_CurrentGameMode = mode;
+            switch (mode)
+            {
+                case GameModeEnum.TwoPlayer:
+                    m_OppoPlayer = new BasePlayer();
+                    break;
+                case GameModeEnum.AIPlayer:
+                default:
+                    m_OppoPlayer = new EasyAIPlayer();
+                    break;
+            }
             
+            m_CurrentPlayer = m_SelfPlayer;
         }
 
-        public bool TrySetChessGridData(PlayerData chessGridPlayerData, int index)
+        /// <summary>
+        /// 继续游戏
+        /// </summary>
+        public void Continue()
         {
-            if (m_ChessGridDataList.Count > index && m_ChessGridDataList[index].PlayerData == null)
+            Init(m_CurrentGameMode);
+        }
+
+        /// <summary>
+        /// 获取当前回合的玩家
+        /// </summary>
+        /// <returns></returns>
+        public BasePlayer GetCurrentPlayer()
+        {
+            return m_CurrentPlayer;
+        }
+        
+        /// <summary>
+        /// 切换玩家
+        /// </summary>
+        public void SwitchPlayer()
+        {
+            if (m_CurrentPlayer == m_SelfPlayer)
             {
-                m_ChessGridDataList[index].PlayerData = chessGridPlayerData;
-                return true;
+                m_CurrentPlayer = m_OppoPlayer;
+                return;
             }
-            else
+            m_CurrentPlayer = m_SelfPlayer;
+        }
+        
+        /// <summary>
+        /// 设置棋盘格信息
+        /// </summary>
+        /// <param name="chessGridPlayerData"></param>
+        /// <param name="index"></param>
+        public void SetChessGridData(PlayerData chessGridPlayerData, int index)
+        {
+            m_ChessGridDataDic[index].PlayerData = chessGridPlayerData;
+        }
+
+        /// <summary>
+        /// 获取玩家所占的棋盘格索引
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public List<int> GetPlayerOccupiedGridIndex(BasePlayer player)
+        {
+            List<int> occupiedGridIndex = new List<int>();
+            foreach (KeyValuePair<int,ChessGridData> pair in m_ChessGridDataDic)
             {
-                return false;
+                if (pair.Value.PlayerData != null && pair.Value.PlayerData.ID != player.m_PlayerData.ID)
+                {
+                    occupiedGridIndex.Add(pair.Key);
+                }
             }
+
+            return occupiedGridIndex;
+        }
+
+        /// <summary>
+        /// 判断索引对应的单元格是否被占用了
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public bool IsGridOccupied(int index)
+        {
+            if (m_ChessGridDataDic.TryGetValue(index, out ChessGridData chessGridData))
+            {
+                return chessGridData.PlayerData != null;
+            }
+
+            return false;
         }
     }
 }

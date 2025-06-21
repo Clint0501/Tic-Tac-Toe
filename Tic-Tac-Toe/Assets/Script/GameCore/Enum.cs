@@ -5,4 +5,12 @@ namespace Script.GameCore
         TwoPlayer,
         AIPlayer,
     }
+
+    public enum GameResultEnum
+    {
+        None,
+        Win,
+        Lose,  
+        Draw
+    }
 }

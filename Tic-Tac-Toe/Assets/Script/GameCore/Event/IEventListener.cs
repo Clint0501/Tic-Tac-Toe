@@ -48,6 +48,8 @@ namespace Script.GameCore
         }
 
         public string m_ViewName;
+
+        public bool m_ForceCloseOtherView;
         
         public object[] m_Args;
     }
@@ -60,5 +62,15 @@ namespace Script.GameCore
         }
 
         public string m_ViewName;
+    }
+
+    public class GameOverEvent : IEvent
+    {
+        public EventKey m_Key
+        {
+            get => EventKey.GameOver;
+        }
+        
+        public PlayerData m_PlayerData;
     }
 }

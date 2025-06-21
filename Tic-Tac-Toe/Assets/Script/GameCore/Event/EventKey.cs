@@ -5,7 +5,9 @@ namespace Script.GameCore
         //单局游戏事件
         GameStart,
         GameOver,
+        Continue,
         PlayerChessDown,
+        SwitchPlayer,
         
         
         //UI事件

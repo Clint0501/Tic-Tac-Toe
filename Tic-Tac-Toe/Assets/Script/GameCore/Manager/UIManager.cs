@@ -103,6 +103,11 @@ namespace Script.GameCore
         {
             if (ie is not CloseUIEvent closeUIEvent) return;
             string viewName = closeUIEvent.m_ViewName;
+            _CloseView(viewName);
+        }
+
+        private void _CloseView(string viewName)
+        {
             if (m_ActiveUIDic.TryGetValue(viewName, out BaseMonoBehavior view))
             {
                 view.gameObject.SetActive(false);
@@ -120,7 +125,7 @@ namespace Script.GameCore
             if (ie is not OpenUIEvent openUIEvent) return;
             string viewName = openUIEvent.m_ViewName;
             object[] args = openUIEvent.m_Args;
-
+            bool forceCloseOtherView = openUIEvent.m_ForceCloseOtherView;
             if (!m_UICache.TryGetValue(viewName, out BaseMonoBehavior view))
             {
 #if UNITY_EDITOR
@@ -144,6 +149,14 @@ namespace Script.GameCore
 
             if (view != null)
             {
+                if (forceCloseOtherView)
+                {
+                    var allViewNames = m_ActiveUIDic.Keys;
+                    foreach (string _viewName in allViewNames)
+                    {
+                        _CloseView(_viewName);
+                    }
+                }
                 view.gameObject.SetActive(true);
                 view.InitViewData(args);
                 m_ActiveUIDic.Add(viewName, view);

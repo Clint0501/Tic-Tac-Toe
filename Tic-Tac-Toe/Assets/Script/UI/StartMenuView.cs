@@ -1,5 +1,6 @@
 using System;
 using Script.GameCore;
+using Script.GameCore.Util;
 using UnityEngine.UI;
 
 namespace Script.UI
@@ -18,20 +19,12 @@ namespace Script.UI
 
         private void OnTwoPlayerGameStart()
         {
-            StartGameEvent startGameEvent  = new StartGameEvent
-            {
-                m_GameMode = GameModeEnum.TwoPlayer
-            };
-            EventManager.GetInstance().DispatchEvent(startGameEvent);
+            EventUtil.SendStartGameEvent(GameModeEnum.TwoPlayer);
         }
 
         private void OnAIGameStart()
         {
-            StartGameEvent startGameEvent  = new StartGameEvent
-            {
-                m_GameMode = GameModeEnum.AIPlayer
-            };
-            EventManager.GetInstance().DispatchEvent(startGameEvent);
+            EventUtil.SendStartGameEvent(GameModeEnum.AIPlayer);
         }
 
         protected override void OverrideStart()
@@ -47,6 +40,8 @@ namespace Script.UI
         protected override void OverrideDisable()
         {
             base.OverrideDisable();
+            m_AIPlayerButton.onClick.RemoveAllListeners();
+            m_TwoPlayerButton.onClick.RemoveAllListeners();
         }
 
         protected override void OverrideDestroy()

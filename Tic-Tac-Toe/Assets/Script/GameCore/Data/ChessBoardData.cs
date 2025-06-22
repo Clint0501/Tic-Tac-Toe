@@ -10,15 +10,10 @@ namespace Script.GameCore
 
         public int ID => m_ID;
 
-        public PlayerData(int id,int markId)
+        public PlayerData(int id)
         {
             m_ID = id;
-            m_MarkID = markId;
         }
-
-        private int m_MarkID;
-        
-        public int MarkID => m_MarkID;
     }
     
     public class ChessGridData
@@ -58,10 +53,13 @@ namespace Script.GameCore
             m_ChessGridDataDic.Clear();
             for (int i = 0; i < 9; i++)
             {
-                m_ChessGridDataDic.Add(i, null);
+                m_ChessGridDataDic.Add(i, new ChessGridData());
             }
 
-            m_SelfPlayer = new BasePlayer();
+            m_SelfPlayer = new BasePlayer
+            {
+                m_PlayerData = new PlayerData(100)
+            };
             m_CurrentGameMode = mode;
             switch (mode)
             {
@@ -116,6 +114,16 @@ namespace Script.GameCore
         {
             m_ChessGridDataDic[index].PlayerData = chessGridPlayerData;
         }
+        
+        /// <summary>
+        /// 获取棋盘格信息
+        /// </summary>
+        /// <param name="chessGridPlayerData"></param>
+        /// <param name="index"></param>
+        public PlayerData GetChessGridData(int index)
+        {
+            return m_ChessGridDataDic[index].PlayerData;
+        }
 
         /// <summary>
         /// 获取玩家所占的棋盘格索引
@@ -145,7 +153,7 @@ namespace Script.GameCore
         {
             if (m_ChessGridDataDic.TryGetValue(index, out ChessGridData chessGridData))
             {
-                return chessGridData.PlayerData != null;
+                return chessGridData?.PlayerData != null;
             }
 
             return false;

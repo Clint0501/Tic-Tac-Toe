@@ -14,9 +14,14 @@ namespace Script.GameCore
 
         private static readonly List<List<int>> s_GameWinCombo = new List<List<int>>()
         {
-            new List<int>(){0,1,2},new List<int>(){3,4,5},new List<int>(){6,7,8},
-            new List<int>(){0,3,6},new List<int>(){1,4,7},new List<int>(){2,5,8},
-            new List<int>(){0,4,8},new List<int>(){2,4,6}
+            new List<int>(){0,1,2},
+            new List<int>(){3,4,5},
+            new List<int>(){6,7,8},
+            new List<int>(){0,3,6},
+            new List<int>(){1,4,7},
+            new List<int>(){2,5,8},
+            new List<int>(){0,4,8},
+            new List<int>(){2,4,6}
         };
 
         public static readonly Dictionary<int, List<List<int>>> s_Index2Combo = new Dictionary<int, List<List<int>>>()
@@ -158,11 +163,12 @@ namespace Script.GameCore
                             break;
                         }
                     }
-                    if(isIgnoreCombo) break;
+                    if(isIgnoreCombo) continue;
                     bool hasResult = false;
                     int id = -1;
-                    foreach (int index in combo)
+                    for (int j = 0; j < combo.Count; j++)
                     {
+                        int index = combo[j];
                         if (mChessGridDataList[index].PlayerData == null)
                         {
                             ignoreIndexs.Add(index);
@@ -179,7 +185,11 @@ namespace Script.GameCore
                             hasResult = false;
                             break;
                         }
-                        hasResult = true;
+
+                        if (j == combo.Count - 1)
+                        {
+                            hasResult = true;
+                        }
                     }
 
                     if (hasResult)
@@ -190,7 +200,7 @@ namespace Script.GameCore
                             return GameResultEnum.Win;
                         }
 
-                        if (ignoreIndexs.Count == 0)
+                        if (id == ChessBoardData.GetInstance().m_OppoPlayer.m_PlayerData.ID)
                         {
                             winner = ChessBoardData.GetInstance().m_OppoPlayer.m_PlayerData;
                             return GameResultEnum.Lose;
@@ -222,6 +232,7 @@ namespace Script.GameCore
                 }
 
                 ChessBoardData.GetInstance().SetChessGridData(playerGridData, gridIndex);
+                EventUtil.SendChessDoneEvent(gridIndex);
                 m_IsGameChecking = true;
             }
         }
@@ -246,7 +257,8 @@ namespace Script.GameCore
                     
             }
 
-            EventUtil.SendOpenViewEvent("Chessboard", true);
+            m_IsGameStart = true;
+            EventUtil.SendOpenViewEvent("ChessboardView", true);
         }
         
         /// <summary>

@@ -13,6 +13,15 @@ namespace Script.GameCore.Util
             };
             EventManager.GetInstance().DispatchEvent(evt);
         }
+        
+        public static void SendChessDoneEvent(int index)
+        {
+            PlayerChessDoneEvent evt = new PlayerChessDoneEvent
+            {
+                m_GridIndex = index
+            };
+            EventManager.GetInstance().DispatchEvent(evt);
+        }
 
         public static void SendGameOverEvent(PlayerData winner)
         {

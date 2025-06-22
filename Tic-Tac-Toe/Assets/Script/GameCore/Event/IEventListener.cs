@@ -30,6 +30,16 @@ namespace Script.GameCore
         public int m_GridIndex;
     }
     
+    public class PlayerChessDoneEvent : IEvent
+    {
+        public EventKey m_Key
+        {
+            get => EventKey.PlayerChessDone;
+        }
+        
+        public int m_GridIndex;
+    }
+    
     public class StartGameEvent : IEvent
     {
         public EventKey m_Key

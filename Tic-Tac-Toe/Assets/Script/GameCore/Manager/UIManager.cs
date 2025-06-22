@@ -112,7 +112,6 @@ namespace Script.GameCore
             {
                 view.gameObject.SetActive(false);
                 m_UICache.Add(viewName, view);
-                m_ActiveUIDic.Remove(viewName);
             }
         }
 
@@ -152,9 +151,16 @@ namespace Script.GameCore
                 if (forceCloseOtherView)
                 {
                     var allViewNames = m_ActiveUIDic.Keys;
+                    List<string> viewNameList = new List<string>();
                     foreach (string _viewName in allViewNames)
                     {
                         _CloseView(_viewName);
+                        viewNameList.Add(_viewName);
+                    }
+
+                    foreach (string _viewName in viewNameList)
+                    {
+                        m_ActiveUIDic.Remove(_viewName);
                     }
                 }
                 view.gameObject.SetActive(true);

@@ -15,6 +15,11 @@ namespace Script.GameCore.PlayerCtrl
     {
         public PlayerData m_PlayerData { get; set; }
 
+        public BasePlayer()
+        {
+            m_PlayerData = new PlayerData(102);
+        }
+        
         public int Index { get; set; }
         public void Action()
         {

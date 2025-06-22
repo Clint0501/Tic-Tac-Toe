@@ -7,6 +7,7 @@ namespace Script.GameCore
         GameOver,
         Continue,
         PlayerChessDown,
+        PlayerChessDone,
         SwitchPlayer,
         
         

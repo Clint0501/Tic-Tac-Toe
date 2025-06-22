@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 6715514200995945689}
   - component: {fileID: 7610828655958039395}
   - component: {fileID: 8910300968872421052}
+  - component: {fileID: 6131059781372361543}
   m_Layer: 5
   m_Name: ChessboardGridTemplate
   m_TagString: Untagged
@@ -197,6 +198,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6131059781372361543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3137361533947720344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca7d7683d95417797e0800f37e9af2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Index: 0
+  m_Button: {fileID: 8910300968872421052}
+  m_ImageSelf: {fileID: 8543488591648194588}
+  m_ImageOppo: {fileID: 1181820184540170729}
 --- !u!1 &6311663801904195306
 GameObject:
   m_ObjectHideFlags: 0

@@ -99,12 +99,21 @@ namespace Script.GameCore
             m_IsWaitingChessDown = true;
             ChessBoardData.GetInstance().Init(GameModeEnum.TwoPlayer);
         }
-        
+
+        private float m_AIThinkingTime = 1.5f;
+        private float m_Counter = 0;
         private void AIUpate()
         {
             if (ChessBoardData.GetInstance().GetCurrentPlayer() is AIPlayer aiPlayer)
             {
-                aiPlayer.Update();
+                //AI让他缓几秒再执行，不然太快了，体验不好
+                m_Counter += Time.deltaTime;
+                if (m_Counter >= m_AIThinkingTime)
+                {
+                    aiPlayer.Update();
+                    m_Counter = 0;
+                }
+                
             }
         }
         
@@ -118,15 +127,12 @@ namespace Script.GameCore
             GameResultEnum resultEnum = HasResult(ChessBoardData.GetInstance().m_ChessGridDataDic ,out PlayerData winner);
             if ( resultEnum == GameResultEnum.None)
             {
-                m_IsWaitingChessDown = true;
                 SwitchPlayer();
             }
             else
             {
-                m_IsWaitingChessDown = false;
-                EventUtil.SendGameOverEvent(winner);
                 m_IsGameStart = false;
-
+                EventUtil.SendGameOverEvent(winner);
             }
             m_IsGameChecking = false;
         }
@@ -221,10 +227,17 @@ namespace Script.GameCore
         /// <param name="ie"></param>
         private void OnPlayerChessDown(IEvent ie)
         {
+            if (!m_IsGameStart) return;
             if(ie is PlayerChessDownEvent playerChessDownEvent)
             {
                 int gridIndex = playerChessDownEvent.m_GridIndex;
                 PlayerData playerGridData = playerChessDownEvent.m_PlayerData;
+                
+                //不是当前回合者落子不算数
+                if (playerGridData.ID != ChessBoardData.GetInstance().GetCurrentPlayer().m_PlayerData.ID)
+                {
+                    return;
+                }
                 if (ChessBoardData.GetInstance().IsGridOccupied(gridIndex))
                 {
                     UIUitl.ShowErrorTips("请落在空白的棋格子上");

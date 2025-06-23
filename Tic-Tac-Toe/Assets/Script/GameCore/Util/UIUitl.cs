@@ -4,6 +4,7 @@ namespace Script.GameCore.Util
     {
         public static void ShowErrorTips(string message)
         {
+            EventUtil.SendCloseViewEvent("ErrorTipsView");
             EventUtil.SendOpenViewEvent("ErrorTipsView", false, message);
         }
         

@@ -21,9 +21,17 @@ namespace Script.UI
         public float m_CloseCountDown = 2.0f;
         #endregion
 
+        #region 私有变量
+
         private float m_Counter = 0;
 
         private bool m_HasClose = false;
+
+
+        #endregion 
+        
+        #region 初始化数据
+
         public override void InitViewData(object[] args)
         {
             base.InitViewData(args);
@@ -33,6 +41,9 @@ namespace Script.UI
             }
         }
 
+        #endregion
+        
+        #region 生命周期
         protected override void OverrideEnable()
         {
             base.OverrideEnable();
@@ -59,5 +70,7 @@ namespace Script.UI
             m_Counter = 0;
             m_Bg.DOAnchorPosY(0, 0);
         }
+        
+        #endregion
     }
 }

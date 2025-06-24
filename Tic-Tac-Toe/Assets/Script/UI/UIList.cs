@@ -36,6 +36,13 @@ namespace Script.UI
 
         public void SetDatas(IEnumerable<object> datas)
         {
+            
+            while (m_Elements.Count > 0)
+            {
+                UIListElement _des = m_Elements[0];
+                m_Elements.RemoveAt(0);
+                Destroy(_des.gameObject);
+            }
             m_Elements.Clear();
             foreach (object d in datas)
             {

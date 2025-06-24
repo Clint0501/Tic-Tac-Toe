@@ -57,6 +57,11 @@ namespace Script.UI
                 m_ImageSelf.gameObject.SetActive(isSelf);
                 m_ImageOppo.gameObject.SetActive(!isSelf);
             }
+            else
+            {
+                m_ImageSelf.gameObject.SetActive(false);
+                m_ImageOppo.gameObject.SetActive(false);
+            }
         }
 
         #endregion

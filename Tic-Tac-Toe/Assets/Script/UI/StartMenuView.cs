@@ -7,12 +7,20 @@ namespace Script.UI
 {
     public class StartMenuView : BaseMonoBehavior
     {
+
+        #region 序列化属性
+
         public Button m_AIPlayerButton;
         
         public Button m_TwoPlayerButton;
-        protected override void OverrideAwake()
+
+        #endregion
+        
+        #region 生命周期
+        
+        protected override void OverrideEnable()
         {
-            base.OverrideAwake();
+            base.OverrideEnable();
             m_AIPlayerButton.onClick.AddListener(OnAIGameStart);
             m_TwoPlayerButton.onClick.AddListener(OnTwoPlayerGameStart);
         }
@@ -48,5 +56,6 @@ namespace Script.UI
         {
             base.OverrideDestroy();
         }
+        #endregion
     }
 }

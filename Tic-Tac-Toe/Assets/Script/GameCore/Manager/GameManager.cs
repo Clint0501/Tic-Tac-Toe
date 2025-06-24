@@ -132,7 +132,8 @@ namespace Script.GameCore
             else
             {
                 m_IsGameStart = false;
-                EventUtil.SendGameOverEvent(winner);
+                EventUtil.SendCloseViewEvent("ChessboardView");
+                EventUtil.SendOpenViewEvent("ResultView", true, winner);
             }
             m_IsGameChecking = false;
         }
@@ -286,6 +287,7 @@ namespace Script.GameCore
                 m_IsWaitingChessDown = true;
                 m_IsGameChecking = false;
                 m_IsGameStart = true;
+                EventUtil.SendOpenViewEvent("ChessBoardView",true);
             }
         }
 

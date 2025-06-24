@@ -8,11 +8,17 @@ namespace Script.UI
     public class ChessboardView: BaseMonoBehavior
     {
 
-        #region 界面组件
+        #region 序列化属性
 
         public UIList m_Chessboard;
 
-        public Text m_ResulText;
+        public Text m_SelfName;
+        public GameObject m_SelfMark;
+        
+        
+        public Text m_OppoName;
+        public GameObject m_OppoMark;
+        
         
         #endregion
 
@@ -21,20 +27,20 @@ namespace Script.UI
         protected override void OverrideEnable()
         {
             base.OverrideEnable();
-            AttachEvent(EventKey.SwitchPlayer,OnSwitchPlayer);
-            AttachEvent(EventKey.GameOver,OnGameOver);
+            AttachEvent(EventKey.SwitchPlayer, OnSwitchPlayer);
+            SetChessboardGrid(ChessBoardData.GetInstance().m_ChessGridDataDic);
+            m_SelfName.text = ChessBoardData.GetInstance().m_SelfPlayer.m_PlayerData.ID.ToString();
+            m_OppoName.text = ChessBoardData.GetInstance().m_OppoPlayer.m_PlayerData.ID.ToString();
+            SetMark();
         }
 
         protected override void OverrideStart()
         {
             base.OverrideStart();
-            SetChessboardGrid(ChessBoardData.GetInstance().m_ChessGridDataDic);
+            
         }
 
-        private void SetChessboardGrid(Dictionary<int, ChessGridData> mChessGridDataDic)
-        {
-            m_Chessboard.SetDatas(mChessGridDataDic.Values);
-        }
+       
 
         protected override void OverrideUpdate()
         {
@@ -46,23 +52,28 @@ namespace Script.UI
         
         
         #region 事件处理
-        
-        private void OnGameOver(IEvent ie)
-        {
-            if (ie is GameOverEvent evt)
-            {
-                if (m_ResulText != null)
-                {
-                    m_ResulText.text = string.Format($"{evt.m_PlayerData.ID}胜利");
-                }
-            }
-        }
 
         private void OnSwitchPlayer(IEvent ie)
         {
-            
+            SetMark();
         }
         
+        #endregion
+
+
+        #region 内部调用
+
+        private void SetChessboardGrid(Dictionary<int, ChessGridData> mChessGridDataDic)
+        {
+            m_Chessboard.SetDatas(mChessGridDataDic.Values);
+        }
+
+        private void SetMark()
+        {
+            m_SelfMark.SetActive(ChessBoardData.GetInstance().GetCurrentPlayer() == ChessBoardData.GetInstance().m_SelfPlayer);
+            m_OppoMark.SetActive(ChessBoardData.GetInstance().GetCurrentPlayer() == ChessBoardData.GetInstance().m_OppoPlayer);
+        }
+
         #endregion
         
     }

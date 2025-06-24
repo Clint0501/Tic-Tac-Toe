@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Script.GameCore
         
         #region 内部变量
 
-        private Dictionary<string,BaseMonoBehavior> m_UICache = new Dictionary<string,BaseMonoBehavior>();
+        private Dictionary<string,List<BaseMonoBehavior>> m_UICache = new Dictionary<string,List<BaseMonoBehavior>>();
         
         private Dictionary<string,BaseMonoBehavior> m_ActiveUIDic = new Dictionary<string,BaseMonoBehavior>();
 
@@ -73,9 +74,14 @@ namespace Script.GameCore
 
             // 每帧只清理一个UI，避免卡顿
             string viewName = m_CacheToClear.Dequeue();
-            if (m_UICache.TryGetValue(viewName, out BaseMonoBehavior view))
+            if (m_UICache.TryGetValue(viewName, out List<BaseMonoBehavior> views))
             {
-                Object.Destroy(view);
+                while (views.Count > 0)
+                {
+                    BaseMonoBehavior view = views[0];
+                    views.RemoveAt(0);
+                    Object.Destroy(view);
+                }
                 m_UICache.Remove(viewName);
             }
 
@@ -104,6 +110,7 @@ namespace Script.GameCore
             if (ie is not CloseUIEvent closeUIEvent) return;
             string viewName = closeUIEvent.m_ViewName;
             _CloseView(viewName);
+            m_ActiveUIDic.Remove(viewName);
         }
 
         private void _CloseView(string viewName)
@@ -111,7 +118,10 @@ namespace Script.GameCore
             if (m_ActiveUIDic.TryGetValue(viewName, out BaseMonoBehavior view))
             {
                 view.gameObject.SetActive(false);
-                m_UICache.Add(viewName, view);
+                if (m_UICache.ContainsKey(viewName) && m_UICache[viewName]!= null)
+                {
+                    m_UICache[viewName].Add(view);
+                }
             }
         }
 
@@ -122,11 +132,17 @@ namespace Script.GameCore
         private void OnOpenView(IEvent ie)
         {
             if (ie is not OpenUIEvent openUIEvent) return;
+            if (m_ActiveUIDic.ContainsKey(openUIEvent.m_ViewName))
+            {
+                return;
+            }
             string viewName = openUIEvent.m_ViewName;
             object[] args = openUIEvent.m_Args;
             bool forceCloseOtherView = openUIEvent.m_ForceCloseOtherView;
-            if (!m_UICache.TryGetValue(viewName, out BaseMonoBehavior view))
+            BaseMonoBehavior view = null;
+            if (!m_UICache.TryGetValue(viewName, out List<BaseMonoBehavior> views))
             {
+                m_UICache.Add(viewName, new List<BaseMonoBehavior>());
 #if UNITY_EDITOR
                 GameObject ui = AssetDatabase.LoadAssetAtPath<GameObject>(string.Format(UI_PATH_FORMAT, viewName));
                 if (!ui)
@@ -141,9 +157,18 @@ namespace Script.GameCore
                     return;
                 }
                 view = uiInst.GetComponent<BaseMonoBehavior>();
+                m_UICache[viewName].Add(view);
+                
 #else
                 //TODO 正式环境下动态加载资源的逻辑
 #endif
+            }
+            else
+            {
+                if (views.Count > 0)
+                {
+                    view = views.First();
+                }
             }
 
             if (view != null)

@@ -38,7 +38,7 @@ namespace Script.GameCore.Util
             OpenUIEvent evt = new OpenUIEvent
             {
                 m_ViewName = viewName,
-                m_Args = new object[]{ args },
+                m_Args = args,
                 m_ForceCloseOtherView = closeOtherView
             };
             EventManager.GetInstance().DispatchEvent(evt);

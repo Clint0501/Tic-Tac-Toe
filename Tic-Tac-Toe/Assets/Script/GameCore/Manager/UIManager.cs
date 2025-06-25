@@ -144,7 +144,14 @@ namespace Script.GameCore
             {
                 m_UICache.Add(viewName, new List<BaseMonoBehavior>());
 #if UNITY_EDITOR
-                GameObject ui = AssetDatabase.LoadAssetAtPath<GameObject>(string.Format(UI_PATH_FORMAT, viewName));
+                GameObject ui = EditorResourceManager.GetInstance().Load<GameObject>(string.Format(UI_PATH_FORMAT, viewName));
+                
+               
+#else
+                //TODO 正式环境下动态加载资源的逻辑
+                GameObject ui = RuntimeResourceManager.GetInstance().Load<GameObject>(string.Format(UI_PATH_FORMAT, viewName));
+#endif
+                
                 if (!ui)
                 {
                     Debug.LogError($"没有找到{viewName}界面");
@@ -157,9 +164,6 @@ namespace Script.GameCore
                     return;
                 }
                 view = uiInst.GetComponent<BaseMonoBehavior>();
-#else
-                //TODO 正式环境下动态加载资源的逻辑
-#endif
             }
             else
             {

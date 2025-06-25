@@ -25,10 +25,7 @@ public class ResultView : BaseMonoBehavior
         if (args.Length > 0)
         {
             PlayerData winner = args[0] as PlayerData;
-            if (winner != null)
-            {
-                m_ResultText.text = $"{winner.ID}获胜";
-            }
+            m_ResultText.text = winner != null ? $"{winner.ID}获胜" : "打成平手";
         }
     }
 

@@ -80,7 +80,7 @@ namespace Script.GameCore
                 {
                     BaseMonoBehavior view = views[0];
                     views.RemoveAt(0);
-                    Object.Destroy(view);
+                    Object.Destroy(view.gameObject);
                 }
                 m_UICache.Remove(viewName);
             }
@@ -157,8 +157,6 @@ namespace Script.GameCore
                     return;
                 }
                 view = uiInst.GetComponent<BaseMonoBehavior>();
-                m_UICache[viewName].Add(view);
-                
 #else
                 //TODO 正式环境下动态加载资源的逻辑
 #endif
@@ -168,6 +166,7 @@ namespace Script.GameCore
                 if (views.Count > 0)
                 {
                     view = views.First();
+                    views.RemoveAt(0);
                 }
             }
 

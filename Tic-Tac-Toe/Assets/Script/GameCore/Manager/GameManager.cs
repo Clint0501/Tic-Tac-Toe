@@ -153,7 +153,7 @@ namespace Script.GameCore
         /// <param name="mChessGridDataList"></param>
         /// <param name="winner"></param>
         /// <returns></returns>
-        private GameResultEnum HasResult(Dictionary<int, ChessGridData> mChessGridDataList,out  PlayerData winner)
+        private GameResultEnum HasResult(Dictionary<int, ChessGridData> mChessGridDataList, out PlayerData winner)
         {
             List<int> ignoreIndexs = new List<int>();
             for (int i = 0; i < s_Index2Combo.Count; i++)
@@ -170,7 +170,8 @@ namespace Script.GameCore
                             break;
                         }
                     }
-                    if(isIgnoreCombo) continue;
+
+                    if (isIgnoreCombo) continue;
                     bool hasResult = false;
                     int id = -1;
                     for (int j = 0; j < combo.Count; j++)
@@ -181,6 +182,7 @@ namespace Script.GameCore
                             ignoreIndexs.Add(index);
                             break;
                         }
+
                         if (id == -1)
                         {
                             id = mChessGridDataList[index].PlayerData.ID;
@@ -212,16 +214,14 @@ namespace Script.GameCore
                             winner = ChessBoardData.GetInstance().m_OppoPlayer.m_PlayerData;
                             return GameResultEnum.Lose;
                         }
-
-                        winner = null;
-                        return GameResultEnum.Draw;
                     }
                 }
             }
+
             winner = null;
-            return GameResultEnum.None;
+            return ignoreIndexs.Count == 0 ? GameResultEnum.Draw : GameResultEnum.None;
         }
-        
+
         /// <summary>
         /// 玩家落子
         /// </summary>
@@ -287,7 +287,7 @@ namespace Script.GameCore
                 m_IsWaitingChessDown = true;
                 m_IsGameChecking = false;
                 m_IsGameStart = true;
-                EventUtil.SendOpenViewEvent("ChessBoardView",true);
+                EventUtil.SendOpenViewEvent("ChessboardView",true);
             }
         }
 

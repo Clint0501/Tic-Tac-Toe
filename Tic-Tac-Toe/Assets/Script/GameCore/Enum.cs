@@ -3,7 +3,9 @@ namespace Script.GameCore
     public enum GameModeEnum
     {
         TwoPlayer,
-        AIPlayer,
+        EasyAIPlayer,
+        NormalAIPlayer,
+        HardAIPlayer,
     }
 
     public enum GameResultEnum

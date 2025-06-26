@@ -6,11 +6,11 @@ namespace Script.GameCore
 {
     public class PlayerData
     {
-        private int m_ID;
+        string m_ID;
 
-        public int ID => m_ID;
+        public string ID => m_ID;
 
-        public PlayerData(int id)
+        public PlayerData(string id)
         {
             m_ID = id;
         }
@@ -58,18 +58,19 @@ namespace Script.GameCore
 
             m_SelfPlayer = new BasePlayer
             {
-                m_PlayerData = new PlayerData(100)
+                m_PlayerData = new PlayerData("玩家1")
             };
             m_CurrentGameMode = mode;
-            switch (mode)
+            if (m_CurrentGameMode == GameModeEnum.TwoPlayer)
             {
-                case GameModeEnum.TwoPlayer:
-                    m_OppoPlayer = new BasePlayer();
-                    break;
-                case GameModeEnum.AIPlayer:
-                default:
-                    m_OppoPlayer = new EasyAIPlayer();
-                    break;
+                m_OppoPlayer = new BasePlayer
+                {
+                    m_PlayerData = new PlayerData("玩家2")
+                };
+            }
+            else
+            {
+                m_OppoPlayer = AIPlayerFactory.GetPlayer(m_CurrentGameMode);
             }
             
             m_CurrentPlayer = m_SelfPlayer;

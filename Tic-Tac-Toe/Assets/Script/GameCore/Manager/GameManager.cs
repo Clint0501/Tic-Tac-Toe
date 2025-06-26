@@ -83,21 +83,12 @@ namespace Script.GameCore
         #region 内部调用
 
         /// <summary>
-        /// 开始AI对局
+        /// 开始对局
         /// </summary>
-        private void HandleAIPlayerGameStart()
+        private void HandleGameStart(GameModeEnum mode)
         {
             m_IsWaitingChessDown = true;
-            ChessBoardData.GetInstance().Init(GameModeEnum.AIPlayer);
-        }
-
-        /// <summary>
-        /// 开始双人对局
-        /// </summary>
-        private void HandleTwoPlayerGameStart()
-        {
-            m_IsWaitingChessDown = true;
-            ChessBoardData.GetInstance().Init(GameModeEnum.TwoPlayer);
+            ChessBoardData.GetInstance().Init(mode);
         }
 
         private float m_AIThinkingTime = 1.5f;
@@ -173,7 +164,7 @@ namespace Script.GameCore
 
                     if (isIgnoreCombo) continue;
                     bool hasResult = false;
-                    int id = -1;
+                    string id = String.Empty;
                     for (int j = 0; j < combo.Count; j++)
                     {
                         int index = combo[j];
@@ -183,7 +174,7 @@ namespace Script.GameCore
                             break;
                         }
 
-                        if (id == -1)
+                        if (id == String.Empty)
                         {
                             id = mChessGridDataList[index].PlayerData.ID;
                             continue;
@@ -258,18 +249,7 @@ namespace Script.GameCore
         private void OnGameStart(IEvent ie)
         {
             if (ie is not StartGameEvent startGameEvent) return;
-            switch (startGameEvent.m_GameMode)
-            {
-                case GameModeEnum.TwoPlayer:
-                    HandleTwoPlayerGameStart();
-                    break;
-                case  GameModeEnum.AIPlayer:
-                    HandleAIPlayerGameStart();
-                    break;
-                default:
-                    break;
-                    
-            }
+            HandleGameStart(startGameEvent.m_GameMode);
 
             m_IsGameStart = true;
             EventUtil.SendOpenViewEvent("ChessboardView", true);

@@ -10,17 +10,12 @@ namespace Script.GameCore.PlayerCtrl
     {
         void Action();
     }
-
+    
     public class BasePlayer : IPlayer
     {
         public PlayerData m_PlayerData { get; set; }
 
-        public BasePlayer()
-        {
-            m_PlayerData = new PlayerData(102);
-        }
-        
-        public int Index { get; set; }
+        private int Index { get; set; }
         public void Action()
         {
             Index = GetPressIndex();
@@ -35,6 +30,10 @@ namespace Script.GameCore.PlayerCtrl
 
     public class AIPlayer : BasePlayer
     {
+        protected AIPlayer()
+        {
+            m_PlayerData = new PlayerData("人机");
+        }
         /// <summary>
         /// 轮到AI时他自己执行
         /// </summary>
@@ -42,41 +41,7 @@ namespace Script.GameCore.PlayerCtrl
         {
             Action();
         }
-    }
-    
-    public class EasyAIPlayer : AIPlayer
-    {
-        protected override int GetPressIndex()
-        {
-            foreach (int index in ChessBoardData.GetInstance().m_ChessGridDataDic.Keys)
-            {
-                if (!ChessBoardData.GetInstance().IsGridOccupied(index))
-                {
-                    return index;
-                }
-            }
 
-            return -1;
-        }
+        
     }
-    
-    public class HardAIPlayer : AIPlayer
-    {
-        protected override int GetPressIndex()
-        {
-            //TODO 找到能获胜的最佳落点
-            // int maxComboCount = Int32.MinValue;
-            // int index = 0;
-            // foreach (KeyValuePair<int,List<List<int>>> pair in GameManager.s_Index2Combo)
-            // {
-            //     if (pair.Value.Count > maxComboCount)
-            //     {
-            //         maxComboCount = pair.Value.Count;
-            //         index = pair.Key;
-            //     }
-            // }
-            return 0;
-        }
-    }
-    
 }

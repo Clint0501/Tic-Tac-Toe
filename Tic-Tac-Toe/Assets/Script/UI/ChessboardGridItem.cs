@@ -70,7 +70,7 @@ namespace Script.UI
 
         void OnButtonClick()
         {
-            EventUtil.SendChessDownEvent(ChessBoardData.GetInstance().m_SelfPlayer.m_PlayerData, m_Index);
+            EventUtil.SendChessDownEvent(ChessBoardData.GetInstance().GetCurrentPlayer().m_PlayerData, m_Index);
         }
         
         private void OnPlayerChessDone(IEvent ie)

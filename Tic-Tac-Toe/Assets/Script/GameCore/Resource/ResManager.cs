@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Script.Common;
 using UnityEditor;
 using UnityEngine;
@@ -11,21 +12,32 @@ namespace Script.GameCore
 {
     public class ResManager : Singleton<ResManager>
     {
-        private ResMap m_ResMap = new ResMap();
-        
         private Dictionary<string, Object> m_CachedAssets = new Dictionary<string, Object>();
 
+        private Dictionary<string, AssetInfo> m_AssetInfoInfoDic = new Dictionary<string, AssetInfo>();
         private Dictionary<string, AssetBundle> m_CachedAssetBundles = new Dictionary<string, AssetBundle>();
         
-        public static readonly string s_ResMapJsonPath = Application.persistentDataPath + "/ResMap.json";
-        public static readonly string s_LocalBundlesPath = Application.persistentDataPath + "/AssetBundles/";
+        public static readonly string s_ResMapXMLPath = Application.streamingAssetsPath + "/ResMap.xml";
+        public static readonly string s_LocalBundlesPath = Application.streamingAssetsPath + "/AssetBundles/";
         public bool Init()
         {
-            m_ResMap  = JsonUtility.FromJson<ResMap>(s_ResMapJsonPath);
-            if (m_ResMap == null || m_ResMap.m_AssetInfoMap.Count == 0)
+            string content = File.ReadAllText(s_ResMapXMLPath);
+            if (content == String.Empty)
             {
-                Debug.LogError("ResMap加载失败");
+                Debug.LogError("AssetMap.xml 未找到！");
                 return false;
+            }
+
+            XmlSerializer serializer = new XmlSerializer(typeof(ResMap));
+            using StringReader reader = new StringReader(content);
+            ResMap map = serializer.Deserialize(reader) as ResMap;
+            m_AssetInfoInfoDic.Clear();
+            if (map != null)
+            {
+                foreach (var info in map.m_AssetInfoList)
+                {
+                    m_AssetInfoInfoDic[info.m_AssetName] = info;
+                }
             }
 
             return true;
@@ -39,7 +51,7 @@ namespace Script.GameCore
             }
 
             T obj = null;
-            if (!m_ResMap.m_AssetInfoMap.TryGetValue(assetName, out AssetInfo info))
+            if (!m_AssetInfoInfoDic.TryGetValue(assetName, out AssetInfo info))
             {
                 Debug.LogError($"未能找到{assetName}资源信息");
                 return null;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Serialization;
 using Script.GameCore;
 using UnityEditor;
 using UnityEngine;
@@ -18,20 +19,29 @@ namespace Script.Editor
         public static void GenerateResMap()
         {
             ResMap resMap = new ResMap();
-            resMap.m_AssetInfoMap.Clear();
+            resMap.m_AssetInfoList.Clear();
             string[] resGuids = AssetDatabase.FindAssets("", s_AssetBundleResourcePaths);
             foreach (string guid in resGuids)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
+                
+                // 过滤文件夹
+                if (AssetDatabase.GetMainAssetTypeAtPath(path) == typeof(DefaultAsset) && AssetDatabase.IsValidFolder(path))
+                {
+                    continue;
+                }
+                
                 AssetInfo assetInfo = new AssetInfo
                 {
                     m_AssetPath = path,
                     m_BundleName = GetBundleName(path),
-                    m_AssetName = Path.GetFileNameWithoutExtension(path)
+                    m_AssetName = Path.GetFileNameWithoutExtension(path),
+                    m_Dependencies = GetDependenciesBundle(path)
                 };
                 if (assetInfo.m_BundleName != String.Empty)
                 {
-                    resMap.m_AssetInfoMap.Add(assetInfo.m_AssetName, assetInfo);
+                    resMap.m_AssetInfoList.Add(assetInfo);
+                    
                 }
                 else
                 {
@@ -40,32 +50,46 @@ namespace Script.Editor
                 
             }
 
-            //收集依赖
-            foreach (KeyValuePair<string,AssetInfo> pair in resMap.m_AssetInfoMap)
+
+            // 序列化为XML
+            XmlSerializer serializer = new XmlSerializer(typeof(ResMap));
+            using (FileStream stream = new FileStream(ResManager.s_ResMapXMLPath, FileMode.Create))
             {
-                AssetInfo assetInfo = pair.Value;
-                assetInfo.m_Dependencies ??= new List<string>();
-                assetInfo.m_Dependencies.Clear();
-                string[] dependencies = AssetDatabase.GetDependencies(assetInfo.m_AssetPath);
-                foreach (string dependencyPath in dependencies)
-                {
-                    if (!dependencyPath.Contains("BundleResources"))
-                    {
-                        continue;
-                    }
-                    string assetName = Path.GetFileNameWithoutExtension(dependencyPath);
-                    if (resMap.m_AssetInfoMap.TryGetValue(assetName, out AssetInfo dependencyAssetInfo) 
-                        && assetInfo.m_Dependencies.Contains(dependencyAssetInfo.m_BundleName))
-                    {
-                        assetInfo.m_Dependencies.Add(dependencyAssetInfo.m_BundleName);
-                    }
-                    
-                }
+                serializer.Serialize(stream, resMap);
             }
-            
-            //将资源映射表写到本地
-            File.WriteAllText(ResManager.s_ResMapJsonPath, JsonUtility.ToJson(resMap));
+            Debug.Log("ResMap.xml 生成完毕：" + ResManager.s_ResMapXMLPath);
+            AssetDatabase.Refresh();
         }
+
+        private static List<string> GetDependenciesBundle(string path)
+        {
+            List<string> result = new List<string>();
+            string[] dependencies = AssetDatabase.GetDependencies(path);
+            foreach (string dependencyPath in dependencies)
+            {
+                bool isBundle = false;
+                foreach (string bundleDir in s_AssetBundleResourcePaths)
+                {
+                    if (dependencyPath.Replace("\\","/").Contains(bundleDir))
+                    {
+                        isBundle = true;
+                        break;
+
+                    }
+                }
+
+                if (!isBundle) continue;
+                string dependencyBundleName = GetBundleName(dependencyPath);
+                if (dependencyBundleName != GetBundleName(path) && result.Contains(dependencyBundleName))
+                {
+                    result.Add(dependencyBundleName);
+                }
+                    
+            }
+
+            return result;
+        }
+
         public static string GetBundleName(string assetPath)
         {
             string dir = Path.GetDirectoryName(assetPath)?.Replace("\\", "/");
@@ -85,6 +109,44 @@ namespace Script.Editor
                 return bundleName;
             }
             return String.Empty;
+        }
+        
+        
+        public static void BuildAssetBundlesFromResMap(ResMap resMap, string outputPath)
+        {
+            // 1. 按BundleName分组
+            Dictionary<string, List<string>> bundleDict = new Dictionary<string, List<string>>();
+            foreach (AssetInfo info in resMap.m_AssetInfoList)
+            {
+                if (!bundleDict.ContainsKey(info.m_BundleName))
+                    bundleDict[info.m_BundleName] = new List<string>();
+                bundleDict[info.m_BundleName].Add(info.m_AssetPath);
+            }
+
+            // 2. 生成AssetBundleBuild数组
+            List<AssetBundleBuild> buildList = new List<AssetBundleBuild>();
+            foreach (KeyValuePair<string, List<string>> kv in bundleDict)
+            {
+                AssetBundleBuild build = new AssetBundleBuild
+                {
+                    assetBundleName = kv.Key,
+                    assetNames = kv.Value.ToArray()
+                };
+                buildList.Add(build);
+            }
+
+            // 3. 调用BuildPipeline
+            if (!Directory.Exists(outputPath))
+                Directory.CreateDirectory(outputPath);
+
+            BuildPipeline.BuildAssetBundles(
+                outputPath,
+                buildList.ToArray(),
+                BuildAssetBundleOptions.None,
+                EditorUserBuildSettings.activeBuildTarget
+            );
+
+            UnityEngine.Debug.Log("AB包打包完成，输出目录：" + outputPath);
         }
 
         #endregion

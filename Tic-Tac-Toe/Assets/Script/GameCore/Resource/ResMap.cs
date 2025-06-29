@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Script.Common;
+using System.Xml.Serialization;
 
 namespace Script.GameCore
 {
@@ -10,17 +11,21 @@ namespace Script.GameCore
     [Serializable]
     public class AssetInfo
     {
-        public string m_AssetPath;
-        public string m_BundleName;
-        public string m_AssetName;
-        public List<string> m_Dependencies;
+        [XmlAttribute] public string m_AssetName;
+        [XmlAttribute] public string m_AssetPath;
+        [XmlAttribute] public string m_BundleName;
+        [XmlArray("Dependencies"), XmlArrayItem("Bundle")]
+        public List<string> m_Dependencies = new List<string>();
     }
 
     /// <summary>
     /// 资源映射表
     /// </summary>
+    [Serializable]
+    [XmlRoot("ResMap")]
     public class ResMap
     {
-        public Dictionary<string,AssetInfo> m_AssetInfoMap = new Dictionary<string,AssetInfo>();
+        [XmlArray("Assets"), XmlArrayItem("AssetInfo")]
+        public List<AssetInfo> m_AssetInfoList = new List<AssetInfo>();
     }
 }

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using DG.Tweening;
 using Script.GameCore;
 using Script.GameCore.Util;
 using UnityEngine;
@@ -15,8 +17,9 @@ public class ResultView : BaseMonoBehavior
 
     public Text m_ResultText;
 
+    public float m_Count = 1.2f;
     #endregion
-
+    private float m_Timer = 0;
     #region 初始化数据
 
     public override void InitViewData(object[] args)
@@ -38,6 +41,7 @@ public class ResultView : BaseMonoBehavior
         base.OverrideEnable();
         m_Back.onClick.AddListener(BackToMenu);
         m_Continue.onClick.AddListener(Continue);
+
     }
 
     protected override void OverrideDisable()
@@ -46,7 +50,7 @@ public class ResultView : BaseMonoBehavior
         m_Back.onClick.RemoveAllListeners();
         m_Continue.onClick.RemoveAllListeners();
     }
-
+    
     #endregion
 
     #region 回调

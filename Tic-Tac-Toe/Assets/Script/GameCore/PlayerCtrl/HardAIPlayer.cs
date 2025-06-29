@@ -81,49 +81,35 @@ namespace Script.GameCore.PlayerCtrl
         /// <returns></returns>
         private int GetWinIndex()
         {
-            int resultIndex = -1;
             for (int i = 0; i < GameManager.s_Index2Combo.Count; i++)
             {
                 List<List<int>> combos = GameManager.s_Index2Combo[i];
-                int curComboResultIndex = -1;
-                int otherCount = 0;
                 foreach (List<int> combo in combos)
                 {
-                    bool hasResult = false;
-                    
-                    for (int j = 0; j < combo.Count; j++)
+                    int curComboResultIndex = -1;
+                    int selfCount = 0;
+                    int emptyCount = 0;
+                    foreach (int index in combo)
                     {
-                        int index = combo[j];
-                        //有空位，可能是目标落点
-                        if (ChessBoardData.GetInstance().m_ChessGridDataDic[index].PlayerData == null)
+                        var playerData = ChessBoardData.GetInstance().m_ChessGridDataDic[index].PlayerData;
+                        if (playerData == null)
                         {
                             curComboResultIndex = index;
+                            emptyCount++;
                         }
-                        else
+                        else if (playerData.ID == this.m_PlayerData.ID)
                         {
-                            //只要有一个格子是自己的，这个组合就可以不用检查了，没戏了
-                            if (ChessBoardData.GetInstance().m_ChessGridDataDic[index].PlayerData.ID != this.m_PlayerData.ID)
-                            {
-                                curComboResultIndex = -1;
-                                break;
-                            }
-                       
-                            //如果有一个格子
-                            if (ChessBoardData.GetInstance().m_ChessGridDataDic[index].PlayerData.ID == this.m_PlayerData.ID)
-                            {
-                                otherCount++;
-                            }
+                            selfCount++;
                         }
                     }
-                }
-                //当前组合如果有两个自己的子，切有空位，这个空位就是我们能获胜的点
-                if (otherCount == 2 && curComboResultIndex != -1)
-                {
-                    resultIndex = curComboResultIndex;
+                    // 如果有2个自己的子，1个空位，就是获胜点
+                    if (selfCount == 2 && emptyCount == 1)
+                    {
+                        return curComboResultIndex;
+                    }
                 }
             }
-
-            return resultIndex;
+            return -1;
         }
 
         

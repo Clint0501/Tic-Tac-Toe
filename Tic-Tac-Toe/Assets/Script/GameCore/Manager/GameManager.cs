@@ -123,8 +123,8 @@ namespace Script.GameCore
             else
             {
                 m_IsGameStart = false;
-                EventUtil.SendCloseViewEvent("ChessboardView");
-                EventUtil.SendOpenViewEvent("ResultView", true, winner);
+                // EventUtil.SendCloseViewEvent("ChessboardView");
+                EventUtil.SendOpenViewEvent("ResultView", false, winner);
             }
             m_IsGameChecking = false;
         }

@@ -28,12 +28,10 @@ namespace Script.UI
         {
             base.OverrideEnable();
             AttachEvent(EventKey.SwitchPlayer, OnSwitchPlayer);
-            SetChessboardGrid(ChessBoardData.GetInstance().m_ChessGridDataDic);
-            m_SelfName.text = ChessBoardData.GetInstance().m_SelfPlayer.m_PlayerData.ID.ToString();
-            m_OppoName.text = ChessBoardData.GetInstance().m_OppoPlayer.m_PlayerData.ID.ToString();
-            SetMark();
+            AttachEvent(EventKey.Continue, OnContinue);
+            Init();
         }
-
+        
         protected override void OverrideStart()
         {
             base.OverrideStart();
@@ -53,6 +51,14 @@ namespace Script.UI
         
         #region 事件处理
 
+        private void OnContinue(IEvent ie)
+        {
+            if (ie.m_Key == EventKey.Continue)
+            {
+                Init();
+            }
+        }
+        
         private void OnSwitchPlayer(IEvent ie)
         {
             SetMark();
@@ -63,6 +69,15 @@ namespace Script.UI
 
         #region 内部调用
 
+        private void Init()
+        {
+            SetChessboardGrid(ChessBoardData.GetInstance().m_ChessGridDataDic);
+            m_SelfName.text = ChessBoardData.GetInstance().m_SelfPlayer.m_PlayerData.ID.ToString();
+            m_OppoName.text = ChessBoardData.GetInstance().m_OppoPlayer.m_PlayerData.ID.ToString();
+            SetMark();
+        }
+        
+        
         private void SetChessboardGrid(Dictionary<int, ChessGridData> mChessGridDataDic)
         {
             m_Chessboard.SetDatas(mChessGridDataDic.Values);

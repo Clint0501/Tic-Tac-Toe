@@ -13,32 +13,20 @@ namespace Script.GameCore.PlayerCtrl
         }
         protected override int GetPressIndex()
         {
-            //先防守，再找最佳落点
-            int index = GetDefendIndex();
-            if (index == -1)
+            //先找自己能够获胜的落点
+            int index = GetWinIndex();
+            if(index == -1)
             {
-                index = GetBestIndex();
+                //再防守，再找最佳落点
+                index = GetDefendIndex();
+                if (index == -1)
+                {
+                    index = GetMostPossibleWinIndex();
+                }
             }
-
             return index;
         }
-
-        /// <summary>
-        /// 获取最佳的落点
-        /// </summary>
-        /// <returns></returns>
-        private int GetBestIndex()
-        {
-            //先找自己能够获胜的落点
-            int resultIndex = GetWinIndex();
-            //如果没有可以获胜的落点，就找最有可能获胜的落点
-            if(resultIndex == -1)
-            {
-                resultIndex = GetMostPossibleWinIndex();
-            }
-
-            return resultIndex;
-        }
+        
         /// <summary>
         /// 获取最有可能获胜的落点
         /// </summary>
@@ -113,9 +101,12 @@ namespace Script.GameCore.PlayerCtrl
                         }
                         else
                         {
-                            //只要有一个各自是自己的，这个组合就可以不用检查了，没戏了
+                            //只要有一个格子是自己的，这个组合就可以不用检查了，没戏了
                             if (ChessBoardData.GetInstance().m_ChessGridDataDic[index].PlayerData.ID != this.m_PlayerData.ID)
+                            {
+                                curComboResultIndex = -1;
                                 break;
+                            }
                        
                             //如果有一个格子
                             if (ChessBoardData.GetInstance().m_ChessGridDataDic[index].PlayerData.ID == this.m_PlayerData.ID)

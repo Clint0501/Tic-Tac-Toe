@@ -51,6 +51,12 @@ namespace Script.Editor
             }
 
 
+            string dir = Path.GetDirectoryName(ResManager.s_ResMapXMLPath);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            
             // 序列化为XML
             XmlSerializer serializer = new XmlSerializer(typeof(ResMap));
             using (FileStream stream = new FileStream(ResManager.s_ResMapXMLPath, FileMode.Create))

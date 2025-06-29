@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ResMap xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Assets>
+    <AssetInfo m_AssetName="ChessboardGridTemplate" m_AssetPath="Assets/BundleResources/UI/ChessboardGridTemplate.prefab" m_BundleName="Assets_BundleResources_UI">
+      <Dependencies />
+    </AssetInfo>
+    <AssetInfo m_AssetName="ChessboardView" m_AssetPath="Assets/BundleResources/UI/ChessboardView.prefab" m_BundleName="Assets_BundleResources_UI">
+      <Dependencies />
+    </AssetInfo>
+    <AssetInfo m_AssetName="ErrorTipsView" m_AssetPath="Assets/BundleResources/UI/ErrorTipsView.prefab" m_BundleName="Assets_BundleResources_UI">
+      <Dependencies />
+    </AssetInfo>
+    <AssetInfo m_AssetName="ResultView" m_AssetPath="Assets/BundleResources/UI/ResultView.prefab" m_BundleName="Assets_BundleResources_UI">
+      <Dependencies />
+    </AssetInfo>
+    <AssetInfo m_AssetName="StartMenuView" m_AssetPath="Assets/BundleResources/UI/StartMenuView.prefab" m_BundleName="Assets_BundleResources_UI">
+      <Dependencies />
+    </AssetInfo>
+  </Assets>
+</ResMap>

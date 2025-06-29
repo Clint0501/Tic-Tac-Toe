@@ -1,0 +1,84 @@
+ManifestFileVersion: 0
+CRC: 3994785757
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 00ec2d90f5cdb70708f38cb7910564da
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c3c99bfa98a064ee1895c2ec57ea8b09
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 00ec2d90f5cdb70708f38cb7910564da
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fa5a6efddb5bfb84cb59dc745ac604c2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d05f6c3fa4ee5d24faec3989a003aa25, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e546d9ad43ae437f882bff639d409a4e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1ca7d7683d95417797e0800f37e9af2c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 294651dc72caaae44b10c1a5356380e6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3b060e99889349c6b0696847c9abfab2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.FontData
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
+Assets:
+- Assets/BundleResources/UI/StartMenuView.prefab
+- Assets/BundleResources/UI/ChessboardGridTemplate.prefab
+- Assets/BundleResources/UI/ErrorTipsView.prefab
+- Assets/BundleResources/UI/ChessboardView.prefab
+- Assets/BundleResources/UI/ResultView.prefab
+Dependencies: []

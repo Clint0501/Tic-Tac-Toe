@@ -44,6 +44,7 @@ namespace Script.GameCore.PlayerCtrl
                             //只要有一个格子是自己的，这个组合就可以不用检查了，安全了.重置
                             if (ChessBoardData.GetInstance().m_ChessGridDataDic[index].PlayerData.ID == this.m_PlayerData.ID)
                             {
+                                curComboResultIndex = -1;
                                 break;
                             }
                                 

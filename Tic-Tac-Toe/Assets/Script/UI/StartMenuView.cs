@@ -16,6 +16,8 @@ namespace Script.UI
         public Button m_AIPlayerButton;
         
         public Button m_TwoPlayerButton;
+
+        public Button m_Quit;
         
         public GameObject m_SubMenu;
         
@@ -36,13 +38,14 @@ namespace Script.UI
             base.OverrideEnable();
             m_AIPlayerButton.onClick.AddListener(OnAIGameStart);
             m_TwoPlayerButton.onClick.AddListener(OnTwoPlayerGameStart);
+            m_Quit.onClick.AddListener(OnQuitGame);
             m_ReturnButton.onClick.AddListener(OnReturn);
             m_EasyAIPlayerButton.onClick.AddListener(OnEasyAIPlayerButton);
             m_NormalAIPlayerButton.onClick.AddListener(OnNormalAIPlayerButton);
             m_HardAIPlayerButton.onClick.AddListener(OnHardAIPlayerButton);
             SetMenu(true);
         }
-        
+
         protected override void OverrideStart()
         {
             base.OverrideStart();
@@ -108,6 +111,11 @@ namespace Script.UI
         private void OnReturn()
         {
             SetMenu(true);
+        }
+        
+        private void OnQuitGame()
+        {
+            Application.Quit();
         }
 
         #endregion
